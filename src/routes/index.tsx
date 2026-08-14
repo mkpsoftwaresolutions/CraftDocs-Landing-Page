@@ -16,12 +16,18 @@ import {
 } from "@/components/landing/Sections";
 import { SectionHeading } from "@/components/landing/shared";
 import { CursorSpotlight, Reveal } from "@/components/landing/Motion";
+import { loadAdminPricingPlans } from "@/lib/admin-plans";
 
 export const Route = createFileRoute("/")({
+  loader: async () => {
+    const plans = await loadAdminPricingPlans();
+    return { plans };
+  },
   component: Landing,
 });
 
 function Landing() {
+  const { plans } = Route.useLoaderData();
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
@@ -94,7 +100,7 @@ function Landing() {
           <ComparisonSection />
         </Reveal>
         <Reveal>
-          <PricingSection />
+          <PricingSection initialPlans={plans} />
         </Reveal>
         <Reveal>
           <FAQSection />

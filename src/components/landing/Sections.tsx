@@ -9,8 +9,8 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useState } from "react";
 import { CtaLink, SectionHeading } from "./shared";
-import { useRemotePricing } from "@/hooks/use-remote-pricing";
-import type { PlanConfig } from "@/lib/pricing-plans";
+import { useAdminPricing } from "@/hooks/use-admin-pricing";
+import type { PlanConfig, PricingPlansConfig } from "@/lib/pricing-plans";
 import { CRAFTDOCS_LOGO, CRAFTDOCS_LOGO_PAD } from "@/lib/brand-assets";
 
 export function TemplatesSection() {
@@ -106,15 +106,17 @@ export function ComparisonSection() {
   );
 }
 
-export function PricingSection() {
+export function PricingSection({ initialPlans }: { initialPlans?: PricingPlansConfig | null }) {
   const [annual, setAnnual] = useState(true);
   const [region, setRegion] = useState<BillingRegion>("IN");
-  const { plans, title, description, yearlyNote } = useRemotePricingExtended();
+  const { plans: catalog, loading } = useAdminPricing(initialPlans);
   const cycle = annual ? "yearly" : "monthly";
+  const plans = catalog?.plans ?? [];
+  const yearlyNote = catalog?.yearlyNote;
 
-  const priceLabel = (plan: PlanConfig, forever = false) => {
+  const priceLabel = (plan: PlanConfig) => {
     const p = plan.prices[region];
-    if (forever || (p.monthly === 0 && p.yearly === 0)) {
+    if (p.monthly === 0 && p.yearly === 0) {
       return {
         amount: formatPlanPrice(0, p.locale, p.currency),
         period: "/ forever",
@@ -131,17 +133,13 @@ export function PricingSection() {
     return { amount: formatted, period: "/ month", note: null as string | null };
   };
 
-  const free = priceLabel(plans.free, true);
-  const pro = priceLabel(plans.pro);
-  const business = priceLabel(plans.business);
-
   return (
     <section id="pricing" className="border-t border-border/60 py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           eyebrow="Simple pricing"
-          title={<span className="gradient-text">{title}</span>}
-          description={description}
+          title={<span className="gradient-text">Plans that match real CraftDocs limits</span>}
+          description="Regional pricing from the CraftDocs studio. Free forever to try the product."
         />
 
         <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
@@ -181,44 +179,38 @@ export function PricingSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
-          <PlanCard
-            name={plans.free.name}
-            blurb={plans.free.blurb}
-            price={free.amount}
-            period={free.period}
-            features={plans.free.features}
-          />
-          <PlanCard
-            name={plans.pro.name}
-            blurb={plans.pro.blurb}
-            price={pro.amount}
-            period={pro.period}
-            note={pro.note}
-            features={plans.pro.features}
-            popular={plans.pro.popular ?? true}
-          />
-          <PlanCard
-            name={plans.business.name}
-            blurb={plans.business.blurb}
-            price={business.amount}
-            period={business.period}
-            note={business.note}
-            features={plans.business.features}
-            popular={plans.business.popular}
-          />
-        </div>
+        {loading && !plans.length ? (
+          <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+            {["a", "b", "c"].map((key) => (
+              <div key={key} className="h-80 animate-pulse rounded-3xl border border-border bg-muted/40" />
+            ))}
+          </div>
+        ) : !plans.length ? (
+          <p className="text-center text-sm text-muted-foreground">
+            Pricing is loading from CraftDocs. Please refresh in a moment.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+            {plans.map((plan) => {
+              const price = priceLabel(plan);
+              return (
+                <PlanCard
+                  key={plan.id}
+                  name={plan.name}
+                  blurb={plan.blurb}
+                  price={price.amount}
+                  period={price.period}
+                  note={price.note}
+                  features={plan.features}
+                  popular={plan.popular}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
-}
-
-function useRemotePricingExtended() {
-  const remote = useRemotePricing();
-  return {
-    ...remote,
-    yearlyNote: remote.plans.yearlyNote,
-  };
 }
 
 function PlanCard({

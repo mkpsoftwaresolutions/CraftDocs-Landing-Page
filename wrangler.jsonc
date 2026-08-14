@@ -2,5 +2,9 @@
   "name": "craftdocs-landing-page",
   "compatibility_date": "2026-08-14",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "dist"
+  "pages_build_output_dir": "dist",
+  "vars": {
+    "VITE_SUPABASE_URL": "https://itjmwmwbuhhaiiplfdmu.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0am13bXdidWhoYWlpcGxmZG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTc0MDIsImV4cCI6MjA5ODEzMzQwMn0.F5lIshmmL9KaRjxjsPGL_P9XPdbqxhHFa2oaCjvF214"
+  }
 }

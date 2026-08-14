@@ -176,54 +176,6 @@ export const TEMPLATES = [
   },
 ] as const;
 
-export const BILLING = {
-  free: {
-    name: "Free",
-    blurb: "For freelancers trying CraftDocs.",
-    features: [
-      "10 documents / month",
-      "1 Inky AI trial invoice",
-      "1 workspace",
-      "Core templates",
-      "CraftDocs PDF watermark",
-      "3 shares / month",
-    ],
-  },
-  pro: {
-    name: "Pro",
-    blurb: "Unlimited docs that look professional and get paid.",
-    popular: true,
-    features: [
-      "Unlimited documents",
-      "3 workspaces",
-      "All templates · no watermark",
-      "Unlimited email / share / WhatsApp",
-      "Reminders & recurring invoices",
-      "Full analytics dashboard",
-    ],
-    prices: {
-      IN: { monthly: 200, yearly: 2000, symbol: "₹", locale: "en-IN", currency: "INR" },
-      US: { monthly: 9, yearly: 90, symbol: "$", locale: "en-US", currency: "USD" },
-    },
-  },
-  business: {
-    name: "Business",
-    blurb: "For agencies and growing teams.",
-    features: [
-      "Everything in Pro",
-      "Unlimited Inky AI invoices",
-      "Unlimited workspaces",
-      "Client portal links",
-      "CSV export",
-      "Priority support",
-    ],
-    prices: {
-      IN: { monthly: 1999, yearly: 19990, symbol: "₹", locale: "en-IN", currency: "INR" },
-      US: { monthly: 29, yearly: 290, symbol: "$", locale: "en-US", currency: "USD" },
-    },
-  },
-} as const;
-
 export type BillingRegion = "IN" | "US";
 
 export function formatPlanPrice(amount: number, locale: string, currency: string) {

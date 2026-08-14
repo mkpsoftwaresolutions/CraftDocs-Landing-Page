@@ -1,9 +1,5 @@
 import { getSupabase } from "@/lib/supabase";
-import {
-  DEFAULT_PRICING_PLANS,
-  type PlanConfig,
-  type PricingPlansConfig,
-} from "@/lib/pricing-plans";
+import { REGION_PRICE_META, type PlanConfig, type PricingPlansConfig } from "@/lib/pricing-plans";
 
 export type AdminPlanRow = {
   id: string;
@@ -29,49 +25,34 @@ function featuresOf(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((f): f is string => typeof f === "string") : [];
 }
 
-function rowToPlan(row: AdminPlanRow, fallback?: PlanConfig): PlanConfig {
+function rowToPlan(row: AdminPlanRow): PlanConfig {
   return {
-    name: row.name || fallback?.name || row.id,
-    blurb: row.blurb || fallback?.blurb || "",
-    popular: row.popular ?? fallback?.popular,
-    features: featuresOf(row.features).length ? featuresOf(row.features) : [...(fallback?.features || [])],
+    id: row.id,
+    name: row.name || row.id,
+    blurb: row.blurb || "",
+    popular: row.popular ?? false,
+    features: featuresOf(row.features),
     prices: {
       IN: {
+        ...REGION_PRICE_META.IN,
         monthly: num(row.price_inr_monthly),
         yearly: num(row.price_inr_yearly),
-        symbol: "₹",
-        locale: "en-IN",
-        currency: "INR",
       },
       US: {
+        ...REGION_PRICE_META.US,
         monthly: num(row.price_usd_monthly),
         yearly: num(row.price_usd_yearly),
-        symbol: "$",
-        locale: "en-US",
-        currency: "USD",
       },
     },
   };
 }
 
-/** Map admin `plans` rows into landing PricingPlansConfig. */
+/** Map admin `plans` rows into landing cards — prices come only from Supabase. */
 export function mapAdminPlansToConfig(rows: AdminPlanRow[]): PricingPlansConfig | null {
   if (!rows?.length) return null;
-  const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
-  const free = byId.free ? rowToPlan(byId.free, DEFAULT_PRICING_PLANS.free) : DEFAULT_PRICING_PLANS.free;
-  const pro = byId.pro
-    ? { ...rowToPlan(byId.pro, DEFAULT_PRICING_PLANS.pro), popular: byId.pro.popular ?? true }
-    : DEFAULT_PRICING_PLANS.pro;
-  const business = byId.business
-    ? rowToPlan(byId.business, DEFAULT_PRICING_PLANS.business)
-    : DEFAULT_PRICING_PLANS.business;
-
-  const yearlyNote =
-    rows.find((r) => r.yearly_discount_note)?.yearly_discount_note ||
-    DEFAULT_PRICING_PLANS.yearlyNote ||
-    "2 months free";
-
-  return { free, pro, business, yearlyNote };
+  const plans = rows.map(rowToPlan);
+  const yearlyNote = rows.map((r) => r.yearly_discount_note?.trim()).find(Boolean);
+  return yearlyNote ? { plans, yearlyNote } : { plans };
 }
 
 /** Fetch active plans from invoice-generator admin panel (Supabase). */
