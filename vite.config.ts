@@ -21,5 +21,23 @@ export default defineConfig({
     ? {
         preset: "node-server",
       }
-    : undefined,
+    : {
+        cloudflare: {
+          pages: {
+            routes: {
+              exclude: [
+                "/assets/*",
+                "/inky/*",
+                "/CraftDocs_Logo.svg",
+                "/favicon.svg",
+                "/favicon.png",
+                "/favicon-64.png",
+                "/apple-touch-icon.png",
+                "/logo-mark.png",
+                "/logo.png",
+              ],
+            },
+          },
+        },
+      },
 });
