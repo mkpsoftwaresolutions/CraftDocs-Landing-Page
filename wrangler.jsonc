@@ -1,0 +1,9 @@
+{
+  "name": "craftdocs-landing-page",
+  "compatibility_date": "2026-08-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    { "pattern": "craftdocs.in", "custom_domain": true },
+    { "pattern": "www.craftdocs.in", "custom_domain": true }
+  ]
+}
