@@ -2,9 +2,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Bell, CheckCircle2, Sparkles, Loader2 } from "lucide-react";
 import { CursorSpotlight } from "./Motion";
-import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
 import { CRAFTDOCS_LOGO, CRAFTDOCS_FAVICON, CRAFTDOCS_LOGO_PAD } from "@/lib/brand-assets";
+import { subscribeWaitlist } from "@/lib/waitlist";
 
 const HIGHLIGHTS = [
   "GST invoices with HSN",
@@ -16,6 +16,7 @@ export function ComingSoonPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "done">("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -32,46 +33,24 @@ export function ComingSoonPage() {
     e.preventDefault();
     const next = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(next) || next.length > 254) {
+      setFormError("Please enter a valid email address.");
       toast.error("Please enter a valid email address.");
       return;
     }
-    
-    setIsSubmitting(true);
-    
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Check if configuration is set
-    if (!serviceId || !templateId || !publicKey || serviceId === "your_service_id_here") {
-      // Mock success if not configured yet so frontend doesn't break, but notify developer
-      console.warn("EmailJS is not configured. Add credentials in .env file.");
-      setTimeout(() => {
-        setEmail(next);
-        setStatus("done");
-        setIsSubmitting(false);
-        toast.info("Subscription received (EmailJS needs configuration in .env)");
-      }, 1000);
-      return;
-    }
+    setFormError("");
+    setIsSubmitting(true);
 
     try {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          subscriber_email: next,
-          received_at: new Date().toLocaleString(),
-        },
-        publicKey
-      );
-      
+      await subscribeWaitlist(next);
       setEmail(next);
       setStatus("done");
       toast.success("Thank you! You have been added to our waitlist.");
     } catch (error) {
-      console.error("Failed to send email via EmailJS:", error);
-      toast.error("Something went wrong. Please try again later.");
+      console.error("Failed to join waitlist:", error);
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again later.";
+      setFormError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -173,7 +152,10 @@ export function ComingSoonPage() {
                   required
                   disabled={isSubmitting}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (formError) setFormError("");
+                  }}
                   placeholder="you@studio.com"
                   className="min-h-12 w-full flex-1 rounded-xl border border-border bg-card/70 px-4 text-sm text-foreground outline-none ring-offset-background backdrop-blur placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
                 />
@@ -195,9 +177,15 @@ export function ComingSoonPage() {
                 You&apos;re on the list. We&apos;ll ping you the moment CraftDocs opens.
               </div>
             )}
-            <p className="mt-3 text-[11px] text-muted-foreground">
-              No spam — just one launch note when the app is ready.
-            </p>
+            {formError ? (
+              <p className="mt-3 text-sm font-medium text-red-400" role="alert">
+                {formError}
+              </p>
+            ) : (
+              <p className="mt-3 text-[11px] text-muted-foreground">
+                No spam — just one launch note when the app is ready.
+              </p>
+            )}
           </form>
 
           <div
