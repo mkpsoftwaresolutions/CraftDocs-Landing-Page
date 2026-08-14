@@ -15,8 +15,8 @@ export default defineConfig({
     server: { entry: "server" },
   },
   // Outside Lovable, override Nitro preset so we can prerender HTML for Firebase Hosting.
-  // On Cloudflare, pin the Workers Builds name and attach craftdocs.in so deploys
-  // update the custom domain instead of only *.workers.dev.
+  // On Cloudflare, pin the Workers Builds name and route the existing zone
+  // (craftdocs.in already has DNS records, so Custom Domains cannot be used).
   nitro: hostingBuild
     ? {
         preset: "node-server",
@@ -25,9 +25,11 @@ export default defineConfig({
         cloudflare: {
           wrangler: {
             name: "craftdocs-landing-page",
+            workers_dev: true,
+            preview_urls: true,
             routes: [
-              { pattern: "craftdocs.in", custom_domain: true },
-              { pattern: "www.craftdocs.in", custom_domain: true },
+              { pattern: "craftdocs.in/*", zone_name: "craftdocs.in" },
+              { pattern: "www.craftdocs.in/*", zone_name: "craftdocs.in" },
             ],
           },
         },
