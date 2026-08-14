@@ -1,0 +1,9 @@
+rules_version = '2';
+// Locked down by default. Open only the paths you need after Auth is wired up.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
