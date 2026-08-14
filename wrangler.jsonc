@@ -2,10 +2,5 @@
   "name": "craftdocs-landing-page",
   "compatibility_date": "2026-08-14",
   "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": true,
-  "preview_urls": true,
-  "routes": [
-    { "pattern": "craftdocs.in/*", "zone_name": "craftdocs.in" },
-    { "pattern": "www.craftdocs.in/*", "zone_name": "craftdocs.in" }
-  ]
+  "pages_build_output_dir": "dist"
 }
