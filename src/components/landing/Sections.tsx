@@ -300,7 +300,7 @@ export function FinalCTASection() {
             href={CRAFTDOCS_APP_URL}
             className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3 text-base font-bold text-slate-900 shadow-2xl transition hover:bg-slate-100"
           >
-            Get early access
+            Start free on CraftDocs
           </a>
         </div>
       </div>
@@ -332,7 +332,7 @@ export function LandingFooter() {
             Pricing
           </a>
           <a href={CRAFTDOCS_APP_URL} className="hover:text-foreground">
-            Coming soon
+            Open CraftDocs
           </a>
         </div>
         <div className="text-center text-[11px] sm:text-left">

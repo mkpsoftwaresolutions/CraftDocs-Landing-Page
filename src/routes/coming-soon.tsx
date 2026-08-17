@@ -1,16 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ComingSoonPage } from "@/components/landing/ComingSoon";
+import { useEffect } from "react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { CRAFTDOCS_APP_URL } from "@/lib/craftdocs";
 
 export const Route = createFileRoute("/coming-soon")({
-  component: ComingSoonPage,
-  head: () => ({
-    meta: [
-      { title: "CraftDocs — Coming Soon" },
-      {
-        name: "description",
-        content:
-          "CraftDocs is almost here. Join the waitlist for GST invoices, quotations, share links, and UPI collection.",
-      },
-    ],
-  }),
+  beforeLoad: () => {
+    throw redirect({ href: CRAFTDOCS_APP_URL, statusCode: 301 });
+  },
+  component: ComingSoonRedirect,
 });
+
+function ComingSoonRedirect() {
+  useEffect(() => {
+    window.location.replace(CRAFTDOCS_APP_URL);
+  }, []);
+
+  return null;
+}

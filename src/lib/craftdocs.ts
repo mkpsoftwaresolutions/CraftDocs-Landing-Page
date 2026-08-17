@@ -1,8 +1,8 @@
 /** Shared CraftDocs marketing constants — aligned with invoice-generator */
 
 export const CRAFTDOCS_URL = "https://craftdocs.in/";
-/** App entry — temporarily routes to the Coming Soon page until launch. */
-export const CRAFTDOCS_APP_URL = "/coming-soon";
+/** Live product app. */
+export const CRAFTDOCS_APP_URL = "https://app.craftdocs.in";
 
 
 export const NAV_LINKS = [

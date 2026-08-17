@@ -6,6 +6,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/coming-soon",
+        "destination": "https://app.craftdocs.in",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
