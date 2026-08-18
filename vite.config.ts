@@ -39,6 +39,7 @@ export default defineConfig({
                 "/og-image.svg",
                 "/robots.txt",
                 "/sitemap.xml",
+                "/googleb3d5a888c2038010.html",
               ],
             },
           },
