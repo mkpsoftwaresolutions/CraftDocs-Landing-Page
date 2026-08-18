@@ -6,7 +6,8 @@ import {
   formatPlanPrice,
   type BillingRegion,
 } from "@/lib/craftdocs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { FaqList } from "./FaqList";
+import { KEYWORD_PAGES } from "@/lib/seo-pages";
 import { useState } from "react";
 import { CtaLink, SectionHeading } from "./shared";
 import { useAdminPricing } from "@/hooks/use-admin-pricing";
@@ -267,34 +268,22 @@ function PlanCard({
 }
 
 export function FAQSection() {
-  return (
-    <section id="faq" className="border-t border-border/60 bg-muted/20 py-16 sm:py-24">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <SectionHeading eyebrow="FAQ" title="Questions teams ask before switching" />
-        <Accordion type="single" collapsible className="space-y-4">
-          {FAQS.map((faq, i) => (
-            <AccordionItem key={faq.q} value={`faq-${i}`} className="glass-card rounded-2xl border border-border px-6 py-2">
-              <AccordionTrigger className="text-left text-sm font-bold text-foreground hover:no-underline">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">{faq.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
-    </section>
-  );
+  return <FaqList items={FAQS} />;
 }
 
-export function FinalCTASection() {
+export function FinalCTASection({
+  title = "Ready to create your next invoice?",
+  description = "Open CraftDocs, chat with Inky AI, or pick a GST-ready template — then send a document your clients can pay against.",
+}: {
+  title?: string;
+  description?: string;
+}) {
   return (
     <section className="relative overflow-hidden bg-gradient-primary py-16 text-white sm:py-24">
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center sm:px-6">
         <img src={CRAFTDOCS_LOGO} alt="CraftDocs" className={`mx-auto h-14 w-auto max-w-[220px] px-4 py-2 rounded-2xl ${CRAFTDOCS_LOGO_PAD}`} />
-        <h2 className="mt-5 text-2xl font-black tracking-tight sm:text-5xl">Ready to create your next invoice?</h2>
-        <p className="mx-auto mt-4 max-w-xl text-base opacity-90">
-          Open CraftDocs, chat with Inky AI, or pick a GST-ready template — then send a document your clients can pay against.
-        </p>
+        <h2 className="mt-5 text-2xl font-black tracking-tight sm:text-5xl">{title}</h2>
+        <p className="mx-auto mt-4 max-w-xl text-base opacity-90">{description}</p>
         <div className="mt-8 flex justify-center">
           <a
             href={CRAFTDOCS_APP_URL}
@@ -316,19 +305,15 @@ export function LandingFooter() {
           <img src={CRAFTDOCS_LOGO} alt="CraftDocs" className={`h-7 w-auto max-w-[140px] px-2 py-1 ${CRAFTDOCS_LOGO_PAD}`} />
         </div>
         <div className="flex max-w-full flex-wrap justify-center gap-x-5 gap-y-2 font-medium">
-          <a href="#preview" className="hover:text-foreground">
+          <a href="/#preview" className="hover:text-foreground">
             Live Preview
           </a>
-          <a href="#inky" className="hover:text-foreground">
-            Inky AI
-          </a>
-          <a href="#features" className="hover:text-foreground">
-            Features
-          </a>
-          <a href="#templates" className="hover:text-foreground">
-            Templates
-          </a>
-          <a href="#pricing" className="hover:text-foreground">
+          {KEYWORD_PAGES.map((page) => (
+            <a key={page.path} href={page.path} className="hover:text-foreground">
+              {page.navLabel}
+            </a>
+          ))}
+          <a href="/#pricing" className="hover:text-foreground">
             Pricing
           </a>
           <a href={CRAFTDOCS_APP_URL} className="hover:text-foreground">

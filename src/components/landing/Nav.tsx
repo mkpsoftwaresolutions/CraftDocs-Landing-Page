@@ -4,7 +4,19 @@ import { CRAFTDOCS_APP_URL, NAV_LINKS } from "@/lib/craftdocs";
 import { CRAFTDOCS_LOGO, CRAFTDOCS_LOGO_PAD } from "@/lib/brand-assets";
 import { CtaLink } from "./shared";
 
-export function LandingNav({ isDark, onToggleDark }: { isDark: boolean; onToggleDark: () => void }) {
+type NavLink = { label: string; href: string };
+
+export function LandingNav({
+  isDark,
+  onToggleDark,
+  links = NAV_LINKS,
+  logoHref = "/",
+}: {
+  isDark: boolean;
+  onToggleDark: () => void;
+  links?: readonly NavLink[];
+  logoHref?: string;
+}) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -26,7 +38,7 @@ export function LandingNav({ isDark, onToggleDark }: { isDark: boolean; onToggle
             : "border border-border/40 bg-card/60 backdrop-blur-xl"
         }`}
       >
-        <a href="#" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+        <a href={logoHref} className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <img
             src={CRAFTDOCS_LOGO}
             alt="CraftDocs"
@@ -35,7 +47,7 @@ export function LandingNav({ isDark, onToggleDark }: { isDark: boolean; onToggle
         </a>
 
         <nav className="hidden items-center gap-5 md:flex">
-          {NAV_LINKS.map((l) => (
+          {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -78,7 +90,7 @@ export function LandingNav({ isDark, onToggleDark }: { isDark: boolean; onToggle
       {open ? (
         <div className="mx-auto mt-2 max-w-6xl rounded-2xl border border-border bg-card/95 p-4 shadow-2xl backdrop-blur-2xl md:hidden">
           <div className="flex flex-col gap-3">
-            {NAV_LINKS.map((l) => (
+            {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}

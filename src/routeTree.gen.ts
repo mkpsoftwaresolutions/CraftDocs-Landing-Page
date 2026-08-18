@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComingSoonRouteImport } from './routes/coming-soon'
+import { Route as GstInvoiceGeneratorRouteImport } from './routes/gst-invoice-generator'
+import { Route as InvoiceSoftwareForFreelancersRouteImport } from './routes/invoice-software-for-freelancers'
+import { Route as QuotationSoftwareRouteImport } from './routes/quotation-software'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +25,75 @@ const ComingSoonRoute = ComingSoonRouteImport.update({
   path: '/coming-soon',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GstInvoiceGeneratorRoute = GstInvoiceGeneratorRouteImport.update({
+  id: '/gst-invoice-generator',
+  path: '/gst-invoice-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvoiceSoftwareForFreelancersRoute =
+  InvoiceSoftwareForFreelancersRouteImport.update({
+    id: '/invoice-software-for-freelancers',
+    path: '/invoice-software-for-freelancers',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const QuotationSoftwareRoute = QuotationSoftwareRouteImport.update({
+  id: '/quotation-software',
+  path: '/quotation-software',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/coming-soon': typeof ComingSoonRoute
+  '/gst-invoice-generator': typeof GstInvoiceGeneratorRoute
+  '/invoice-software-for-freelancers': typeof InvoiceSoftwareForFreelancersRoute
+  '/quotation-software': typeof QuotationSoftwareRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/coming-soon': typeof ComingSoonRoute
+  '/gst-invoice-generator': typeof GstInvoiceGeneratorRoute
+  '/invoice-software-for-freelancers': typeof InvoiceSoftwareForFreelancersRoute
+  '/quotation-software': typeof QuotationSoftwareRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/coming-soon': typeof ComingSoonRoute
+  '/gst-invoice-generator': typeof GstInvoiceGeneratorRoute
+  '/invoice-software-for-freelancers': typeof InvoiceSoftwareForFreelancersRoute
+  '/quotation-software': typeof QuotationSoftwareRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/coming-soon'
+  fullPaths:
+    | '/'
+    | '/coming-soon'
+    | '/gst-invoice-generator'
+    | '/invoice-software-for-freelancers'
+    | '/quotation-software'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/coming-soon'
-  id: '__root__' | '/' | '/coming-soon'
+  to:
+    | '/'
+    | '/coming-soon'
+    | '/gst-invoice-generator'
+    | '/invoice-software-for-freelancers'
+    | '/quotation-software'
+  id:
+    | '__root__'
+    | '/'
+    | '/coming-soon'
+    | '/gst-invoice-generator'
+    | '/invoice-software-for-freelancers'
+    | '/quotation-software'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComingSoonRoute: typeof ComingSoonRoute
+  GstInvoiceGeneratorRoute: typeof GstInvoiceGeneratorRoute
+  InvoiceSoftwareForFreelancersRoute: typeof InvoiceSoftwareForFreelancersRoute
+  QuotationSoftwareRoute: typeof QuotationSoftwareRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +112,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComingSoonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gst-invoice-generator': {
+      id: '/gst-invoice-generator'
+      path: '/gst-invoice-generator'
+      fullPath: '/gst-invoice-generator'
+      preLoaderRoute: typeof GstInvoiceGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invoice-software-for-freelancers': {
+      id: '/invoice-software-for-freelancers'
+      path: '/invoice-software-for-freelancers'
+      fullPath: '/invoice-software-for-freelancers'
+      preLoaderRoute: typeof InvoiceSoftwareForFreelancersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quotation-software': {
+      id: '/quotation-software'
+      path: '/quotation-software'
+      fullPath: '/quotation-software'
+      preLoaderRoute: typeof QuotationSoftwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComingSoonRoute: ComingSoonRoute,
+  GstInvoiceGeneratorRoute: GstInvoiceGeneratorRoute,
+  InvoiceSoftwareForFreelancersRoute: InvoiceSoftwareForFreelancersRoute,
+  QuotationSoftwareRoute: QuotationSoftwareRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { getFirebaseApp, initFirebaseAnalytics } from "../lib/firebase";
+import { getSiteHead } from "../lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -75,42 +76,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CraftDocs — GST Invoices powered by Inky AI" },
-      {
-        name: "description",
-        content:
-          "CraftDocs is a GST-ready document studio with Inky AI — chat to create invoices, quotations, and challans. Brand kits, PDF export, WhatsApp share, and UPI collection for freelancers and businesses.",
-      },
-      { name: "author", content: "CraftDocs" },
-      { property: "og:title", content: "CraftDocs — Smart invoices. Seamless growth." },
-      {
-        property: "og:description",
-        content:
-          "Meet Inky AI: chat to build GST invoices. 20 document types, templates, brand kits, WhatsApp, and UPI — start free at craftdocs.in.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://craftdocs.in/" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "CraftDocs — Smart invoices. Seamless growth." },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
-      },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "icon", href: "/favicon-64.png", type: "image/png", sizes: "64x64" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-    ],
-  }),
+  head: () => {
+    const seo = getSiteHead();
+    return {
+      meta: seo.meta,
+      links: [{ rel: "stylesheet", href: appCss }, ...seo.links],
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -119,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en-IN" className="dark">
       <head>
         <HeadContent />
       </head>

@@ -1,6 +1,11 @@
 import { DOC_TYPES, FEATURES, WORKFLOW_STEPS } from "@/lib/craftdocs";
 import { SectionHeading } from "./shared";
 
+const DOC_TYPE_HREFS: Partial<Record<(typeof DOC_TYPES)[number]["id"], string>> = {
+  "gst-invoice": "/gst-invoice-generator",
+  quotation: "/quotation-software",
+};
+
 export function DocTypesSection() {
   return (
     <section className="border-y border-border/60 bg-muted/25 py-12">
@@ -9,15 +14,26 @@ export function DocTypesSection() {
           20 document types for real billing workflows
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {DOC_TYPES.map((d) => (
-            <div
-              key={d.id}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm"
-            >
-              <span className="mr-2 inline-block h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
-              {d.title}
-            </div>
-          ))}
+          {DOC_TYPES.map((d) => {
+            const href = DOC_TYPE_HREFS[d.id];
+            const className =
+              "rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm";
+            const inner = (
+              <>
+                <span className="mr-2 inline-block h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+                {d.title}
+              </>
+            );
+            return href ? (
+              <a key={d.id} href={href} className={`${className} transition hover:border-primary/40 hover:text-primary`}>
+                {inner}
+              </a>
+            ) : (
+              <div key={d.id} className={className}>
+                {inner}
+              </div>
+            );
+          })}
           <div className="rounded-full border border-dashed border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
             + packing slips, export & more
           </div>

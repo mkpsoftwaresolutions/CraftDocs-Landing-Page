@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Builds the TanStack Start app with a Node server preset, prerenders `/`
- * into dist/index.html, and copies static assets for Firebase Hosting.
+ * Builds the TanStack Start app with a Node server preset, prerenders
+ * indexable routes into dist/*.html, and copies static assets for Firebase Hosting.
  */
 import { spawn } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
@@ -13,6 +13,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(root, "dist");
 const publicDir = path.join(root, ".output", "public");
 const serverEntry = path.join(root, ".output", "server", "index.mjs");
+const PRERENDER_ROUTES = [
+  "/",
+  "/gst-invoice-generator",
+  "/quotation-software",
+  "/invoice-software-for-freelancers",
+];
 
 function run(command, args, env = {}) {
   return new Promise((resolve, reject) => {
@@ -93,13 +99,16 @@ async function main() {
 
   try {
     await waitForServer(base);
-    const res = await fetch(base + "/");
-    if (!res.ok) {
-      throw new Error(`Prerender request failed: ${res.status} ${res.statusText}`);
+    for (const route of PRERENDER_ROUTES) {
+      const res = await fetch(base + route);
+      if (!res.ok) {
+        throw new Error(`Prerender ${route} failed: ${res.status} ${res.statusText}`);
+      }
+      const html = await res.text();
+      const file = route === "/" ? "index.html" : `${route.replace(/^\//, "")}.html`;
+      writeFileSync(path.join(distDir, file), html, "utf8");
+      console.log(`→ Wrote dist/${file}`);
     }
-    const html = await res.text();
-    writeFileSync(path.join(distDir, "index.html"), html, "utf8");
-    console.log("→ Wrote dist/index.html");
   } finally {
     server.kill("SIGTERM");
     await new Promise((r) => setTimeout(r, 300));

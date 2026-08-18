@@ -17,8 +17,12 @@ import {
 import { SectionHeading } from "@/components/landing/shared";
 import { CursorSpotlight, Reveal } from "@/components/landing/Motion";
 import { loadAdminPricingPlans } from "@/lib/admin-plans";
+import { JsonLd } from "@/components/landing/JsonLd";
+import { getPageHead, getPageJsonLd } from "@/lib/seo";
+import { HOME_SEO } from "@/lib/seo-pages";
 
 export const Route = createFileRoute("/")({
+  head: () => getPageHead(HOME_SEO),
   loader: async () => {
     const plans = await loadAdminPricingPlans();
     return { plans };
@@ -36,6 +40,7 @@ function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background bg-hero text-foreground transition-colors duration-300 selection:bg-primary selection:text-white">
+      <JsonLd data={getPageJsonLd(HOME_SEO)} />
       <CursorSpotlight />
       <div className="relative z-10">
         <LandingNav isDark={isDark} onToggleDark={() => setIsDark((v) => !v)} />

@@ -14,7 +14,7 @@ export function LandingHero() {
             className="hero-animate-item inline-flex items-center gap-2 rounded-full border border-primary/30 bg-background/80 px-3 py-1.5 text-xs font-bold text-foreground shadow-sm backdrop-blur"
             style={{ animationDelay: "60ms" }}
           >
-            <img src="/inky/inky-avatar.png" alt="" className="h-4 w-4 rounded-full" />
+            <img src="/inky/inky-avatar.png" alt="Inky AI" className="h-4 w-4 rounded-full" />
             Now with Inky AI · GST-ready studio
           </div>
 
@@ -23,7 +23,7 @@ export function LandingHero() {
             style={{ animationDelay: "140ms" }}
           >
             <span className="block text-primary">CraftDocs</span>
-            <span className="mt-1 block">Invoices that look finished — and get paid</span>
+            <span className="mt-1 block">GST invoices that look finished — and get paid</span>
           </h1>
 
           <p
@@ -69,7 +69,7 @@ export function LandingHero() {
           <div className="premium-card shimmer-edge overflow-hidden rounded-3xl border border-border bg-card shadow-2xl">
             <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
               <div className="flex items-center gap-2">
-                <img src={CRAFTDOCS_FAVICON} alt="" className="h-7 w-7 rounded-lg object-contain" />
+                <img src={CRAFTDOCS_FAVICON} alt="CraftDocs" className="h-7 w-7 rounded-lg object-contain" />
                 <div>
                   <div className="text-xs font-bold text-foreground">CraftDocs Studio</div>
                   <div className="text-[10px] text-muted-foreground">GSTIN ready · INV-2026/184</div>

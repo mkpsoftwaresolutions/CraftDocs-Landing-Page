@@ -72,7 +72,7 @@ export function InkySection() {
               <div className="flex items-center gap-3 border-b border-border bg-muted/40 px-4 py-3">
                 <img
                   src="/inky/inky-avatar.png"
-                  alt=""
+                  alt="Inky AI"
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-primary/30"
                 />
                 <div className="min-w-0 flex-1">

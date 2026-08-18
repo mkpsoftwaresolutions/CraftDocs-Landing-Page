@@ -265,7 +265,7 @@ export function InteractiveInvoicePreview() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <img src={CRAFTDOCS_FAVICON} alt="" className="h-7 w-7 rounded-lg bg-white/20 object-contain p-0.5" />
+                    <img src={CRAFTDOCS_FAVICON} alt="CraftDocs" className="h-7 w-7 rounded-lg bg-white/20 object-contain p-0.5" />
                     <span className="text-lg font-bold tracking-tight">CraftDocs Studio</span>
                   </div>
                   <p className="mt-1 text-xs opacity-80">GSTIN 24AALCK6034E1ZP · Ahmedabad, Gujarat</p>
